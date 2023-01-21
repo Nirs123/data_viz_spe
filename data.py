@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 
-def speCount(file,year,gender):
-    df = pd.read_csv(file)
+def speCount(file,year,gender,location,locationName):
+    df = pd.read_csv("data/"+file)
 
     speGirls = {"HLP":0,"LLCA":0,"LLCER":0,"HGGSP":0,"SES":0,"MTH":0,"PC":0,"SVT":0,"SI":0,"NSI":0,"ART":0}
     speBoys = {"HLP":0,"LLCA":0,"LLCER":0,"HGGSP":0,"SES":0,"MTH":0,"PC":0,"SVT":0,"SI":0,"NSI":0,"ART":0}
@@ -11,8 +11,19 @@ def speCount(file,year,gender):
     if file == "terminale.csv":
         gap = 2
 
+    def verifyLocation(row,location,locationName):
+        if location == "fr":
+            return True
+        elif location == "region":
+            if row[2] == locationName:
+                return True
+        elif location == "academie":
+            if row[3] == locationName:
+                return True
+        return False
+
     for row in df.itertuples():
-        if row[1] == int(year):
+        if row[1] == int(year) and verifyLocation(row,location,locationName):
             speGirls["HLP"] += np.int32(np.int32(np.nan_to_num(row[13])))
             speBoys["HLP"] += np.int32(np.nan_to_num(row[14]))
             speGirls["LLCA"] += np.int32(np.nan_to_num(row[15])) + np.int32(np.nan_to_num(row[17]))
