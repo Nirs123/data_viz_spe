@@ -2,15 +2,19 @@ import pandas as pd
 import numpy as np
 
 def speCount(file,year,gender,location,locationName):
+    #Open csv file
     df = pd.read_csv("data/"+file)
 
+    #Initiate dictionaries
     speGirls = {"HLP":0,"LLCA":0,"LLCER":0,"HGGSP":0,"SES":0,"MTH":0,"PC":0,"SVT":0,"SI":0,"NSI":0,"ART":0}
     speBoys = {"HLP":0,"LLCA":0,"LLCER":0,"HGGSP":0,"SES":0,"MTH":0,"PC":0,"SVT":0,"SI":0,"NSI":0,"ART":0}
 
+    #Gap particularity on terminale.csv file
     gap = 0
     if file == "terminale.csv":
         gap = 2
 
+    #Function to check location
     def verifyLocation(row,location,locationName):
         if location == "fr":
             return True
@@ -22,8 +26,11 @@ def speCount(file,year,gender,location,locationName):
                 return True
         return False
 
+    #For each row in csv file
     for row in df.itertuples():
+        #Apply request settings (year and location)
         if row[1] == int(year) and verifyLocation(row,location,locationName):
+            #If row is valid, add each numbers to dictinaries
             speGirls["HLP"] += np.int32(np.int32(np.nan_to_num(row[13])))
             speBoys["HLP"] += np.int32(np.nan_to_num(row[14]))
             speGirls["LLCA"] += np.int32(np.nan_to_num(row[15])) + np.int32(np.nan_to_num(row[17]))
@@ -47,6 +54,8 @@ def speCount(file,year,gender,location,locationName):
             speBoys["NSI"] += np.int32(np.nan_to_num(row[34-gap]))
             speGirls["ART"] += np.int32(np.nan_to_num(row[35-gap])) + np.int32(np.nan_to_num(row[37-gap])) + np.int32(np.nan_to_num(row[39-gap])) + np.int32(np.nan_to_num(row[41-gap])) + np.int32(np.nan_to_num(row[43-gap])) + np.int32(np.nan_to_num(row[45-gap])) + np.int32(np.nan_to_num(row[47-gap]))
             speBoys["ART"] += np.int32(np.nan_to_num(row[36-gap])) + np.int32(np.nan_to_num(row[38-gap])) + np.int32(np.nan_to_num(row[40-gap])) + np.int32(np.nan_to_num(row[42-gap])) + np.int32(np.nan_to_num(row[44-gap])) + np.int32(np.nan_to_num(row[46-gap])) + np.int32(np.nan_to_num(row[48-gap]))
+    
+    #Depending on the request gender, return dictionnaries
     if gender == "All":
         return speGirls,speBoys
     elif gender == "Girls":

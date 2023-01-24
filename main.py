@@ -6,6 +6,7 @@ from PIL import ImageTk
 import os
 from tkinter.filedialog import asksaveasfile
 
+#Creating list of regions and academies
 regionList = ["AUVERGNE-RHONE-ALPES" , "BOURGOGNE-FRANCHE-COMTE" , "BRETAGNE" , "CENTRE-VAL DE LOIRE" , "CORSE" , "GRAND EST" , "GUADELOUPE" , "GUYANE",
 "HAUTS-DE-FRANCE" , "ILE-DE-FRANCE" , "LA REUNION" , "MARTINIQUE" , "MAYOTTE" , "NORMANDIE" , "NOUVELLE-AQUITAINE" , "OCCITANIE" , "PAYS DE LA LOIRE",
 "PROVENCE-ALPES-COTE D'AZUR"]
@@ -13,12 +14,9 @@ academieList = ["CLERMONT-FERRAND","GRENOBLE","LYON","BESANCON", "DIJON","RENNES
 "GUADELOUPE","GUYANE","AMIENS","LILLE","CRETEIL","PARIS","VERSAILLES","LA REUNION","MARTINIQUE","MAYOTTE","NORMANDIE","BORDEAUX",
 "LIMOGES","POITIERS","MONTPELLIER","TOULOUSE","NANTES","AIX-MARSEILLE","NICE","NOUVELLE CALEDONIE","POLYNESIE FRANCAISE","ST PIERRE ET MIQUELON"]
 
+#Class to create tkinter elemnt (label, button, entry or check) and grid it
 class Text_Button_Entry:
     def __init__(self,type,text,frame,row,rowspan,column,columnspan,padx,pady,size,command,variable,image,checkSize,width,height):
-        '''
-        Créée l'élement en prenant en compte son contenu, sa frame, sa colonne, sa ligne,
-        son padx, son pady, sa taille etc...
-        '''
         self.text = text
         self.frame = frame
         self.row = row
@@ -31,7 +29,7 @@ class Text_Button_Entry:
         self.type = type
         self.command = command
         self.var = variable
-        #Création de l'élement en fonction de son type
+        #Create element
         if self.type == "Label":
             self.temp = tk.Label(self.frame, text = self.text, font=('Bahnschrift',str(self.size)),bg="#FFFFFF", fg="#000000")
         elif self.type == "Button":
@@ -40,15 +38,13 @@ class Text_Button_Entry:
             self.temp = tk.Entry(self.frame,font=('Bahnschrift',str(self.size)),bg="#FFFFFF", fg="#000000",textvariable=self.var)
         elif self.type == "Check":
             self.temp = tk.Checkbutton(self.frame,text = self.text, font =('Bahnschrift',str(self.size)),bg="#FFFFFF", fg="grey",variable=self.var,width=checkSize)
-        #Affichage de l'élement
+        #Display element
         self.temp.grid(row = self.row,column = self.column,padx = self.padx,pady = self.pady,columnspan = self.columnspan, rowspan = self.rowspan)
 
     def grid_forget(self):
-        '''
-        Permet de supprimer l'élement qui a été crée
-        '''
         self.temp.grid_forget()
 
+#Main window class
 class Window:
     def __init__(self):
         self.win = tk.Tk()
@@ -62,7 +58,7 @@ class Window:
 
         self.win.mainloop()
 
-
+    #Main menu window
     def winMainMenu(self):
         self.menuFrame = tk.Frame(self.win,bg="#FFFFFF")
 
@@ -81,7 +77,7 @@ class Window:
 
         self.menuFrame.pack()
 
-
+    #Pie chart menu
     def winPieMenu(self):
         self.menuFrame.destroy()
         self.pieMenuFrame = tk.Frame(self.win,bg="#FFFFFF")
@@ -129,11 +125,11 @@ class Window:
         self.speNSITitle = Text_Button_Entry("Check","NSI",self.pieMenuFrame,12,1,1,1,0,3,12,None,self.speNSI,None,20,None,None)
         self.speARTTitle = Text_Button_Entry("Check","ART",self.pieMenuFrame,12,1,2,1,0,3,12,None,self.speART,None,20,None,None)
 
-        self.validButtonPie = Text_Button_Entry("Button","Valider",self.pieMenuFrame,13,1,0,4,0,10,15,self.processPie,None,None,None,None,None)
+        self.validButtonPie = Text_Button_Entry("Button","Valider",self.pieMenuFrame,13,1,0,4,0,10,15,lambda : self.process("pie"),None,None,None,None,None)
 
         self.pieMenuFrame.pack()
 
-
+    #Bar chart menu
     def winBarMenu(self):
         self.menuFrame.destroy()
         self.barMenuFrame = tk.Frame(self.win,bg="#FFFFFF")
@@ -169,73 +165,31 @@ class Window:
         self.locationRegionTitle = Text_Button_Entry("Check","Région (choix ultérieur)",self.barMenuFrame,8,1,1,2,0,5,12,None,self.locationRegion,None,20,None,None)
         self.locationAcademieTitle = Text_Button_Entry("Check","Académie (choix ultérieur)",self.barMenuFrame,8,1,3,1,0,5,12,None,self.locationAcademie,None,20,None,None)
         
-        self.validButtonPie = Text_Button_Entry("Button","Valider",self.barMenuFrame,13,1,0,4,0,25,15,self.processBar,None,None,None,None,None)
+        self.validButtonPie = Text_Button_Entry("Button","Valider",self.barMenuFrame,13,1,0,4,0,25,15,lambda : self.process("bar"),None,None,None,None,None)
 
         self.barMenuFrame.pack()
 
-
-    def processPie(self):
+    #Process information from bar and pie chart menu
+    def process(self,type):
         if (self.year2020.get() + self.year2021.get()) != 1:
             errorBox("Veuillez choisir une seule année.")
         elif (self.classeP.get() + self.classeT.get()) != 1:
             errorBox("Veuillez choisir une seule classe.")
-        elif (self.locationFR.get() + self.locationRegion.get() + self.locationAcademie.get()) != 1:
-            errorBox("Veuillez choisir un seul lieu.")
-        elif (self.speHLP.get() + self.speLLCA.get() + self.speLLCER.get() + self.speHGGSP.get() + self.speSES.get() + self.speMTH.get()
-            + self.spePC.get() + self.speSVT.get() + self.speSI.get() + self.speNSI.get() + self.speART.get()) != 1:
-            errorBox("Veuillez choisir un seul enseignement de spécialité")
-        else:
-            if self.locationFR.get() != 1:
-                self.chooseLocationFrame = tk.Frame(self.win,bg="#FFFFFF")
-                if self.locationRegion.get() == 1:
-                    self.pieMenuFrame.destroy()
-                    self.chooseLocationTitle = Text_Button_Entry("Label","Veuillez choisir la région:",self.chooseLocationFrame,0,1,0,3,0,13,30,None,None,None,None,None,None)
-                    self.indexRow,self.indexCol = 1,0
-                    self.dictRegion = {}
-                    for i in range(len(regionList)):
-                        self.regionValue =tk.IntVar()
-                        if self.indexCol>2:
-                            self.indexCol = 0
-                            self.indexRow += 1
-                        self.regionName = Text_Button_Entry("Check",regionList[i],self.chooseLocationFrame,self.indexRow,1,self.indexCol,1,0,13,12,None,self.regionValue,None,33,None,None)
-                        self.dictRegion[regionList[i]] = self.regionValue
-                        self.indexCol += 1
-                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,3,0,10,15,self.verifyPie,None,None,None,None,None)
-                else:
-                    self.pieMenuFrame.destroy()
-                    self.chooseLocationTitle = Text_Button_Entry("Label","Veuillez choisir l'académie:",self.chooseLocationFrame,0,1,0,4,0,10,30,None,None,None,None,None,None)
-                    self.indexRow,self.indexCol = 1,0
-                    self.dictAcademie = {}
-                    for i in range(len(academieList)):
-                        self.academieValue =tk.IntVar()
-                        if self.indexCol>3:
-                            self.indexCol = 0
-                            self.indexRow += 1
-                        self.academieName = Text_Button_Entry("Check",academieList[i],self.chooseLocationFrame,self.indexRow,1,self.indexCol,1,0,10,12,None,self.academieValue,None,20,None,None)
-                        self.dictAcademie[academieList[i]] = self.academieValue
-                        self.indexCol += 1
-                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,4,0,10,15,self.verifyPie,None,None,None,None,None)
-
-                self.chooseLocationFrame.pack()
-            else:
-                self.pieMenuFrame.destroy()
-                self.generatePieChart()
-
-
-    def processBar(self):
-        if (self.year2020.get() + self.year2021.get()) != 1:
-            errorBox("Veuillez choisir une seule année.")
-        elif (self.classeP.get() + self.classeT.get()) != 1:
-            errorBox("Veuillez choisir une seule classe.")
-        elif (self.genderA.get() + self.genderG.get() + self.genderB.get()) != 1:
+        elif type == "bar" and (self.genderA.get() + self.genderG.get() + self.genderB.get()) != 1:
             errorBox("Veuillez choisir un seul genre")
         elif (self.locationFR.get() + self.locationRegion.get() + self.locationAcademie.get()) != 1:
             errorBox("Veuillez choisir un seul lieu.")
+        elif type == "pie" and (self.speHLP.get() + self.speLLCA.get() + self.speLLCER.get() + self.speHGGSP.get() + self.speSES.get() + self.speMTH.get()
+            + self.spePC.get() + self.speSVT.get() + self.speSI.get() + self.speNSI.get() + self.speART.get()) != 1:
+            errorBox("Veuillez choisir un seul enseignement de spécialité")
         else:
+            if type == "bar":
+                self.barMenuFrame.destroy()
+            elif type == "pie":
+                self.pieMenuFrame.destroy()
             if self.locationFR.get() != 1:
                 self.chooseLocationFrame = tk.Frame(self.win,bg="#FFFFFF")
                 if self.locationRegion.get() == 1:
-                    self.barMenuFrame.destroy()
                     self.chooseLocationTitle = Text_Button_Entry("Label","Veuillez choisir la région:",self.chooseLocationFrame,0,1,0,3,0,13,30,None,None,None,None,None,None)
                     self.indexRow,self.indexCol = 1,0
                     self.dictRegion = {}
@@ -247,9 +201,8 @@ class Window:
                         self.regionName = Text_Button_Entry("Check",regionList[i],self.chooseLocationFrame,self.indexRow,1,self.indexCol,1,0,13,12,None,self.regionValue,None,33,None,None)
                         self.dictRegion[regionList[i]] = self.regionValue
                         self.indexCol += 1
-                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,3,0,10,15,self.verifyBar,None,None,None,None,None)
+                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,3,0,10,15,lambda : self.verify(type),None,None,None,None,None)
                 else:
-                    self.barMenuFrame.destroy()
                     self.chooseLocationTitle = Text_Button_Entry("Label","Veuillez choisir l'académie:",self.chooseLocationFrame,0,1,0,4,0,10,30,None,None,None,None,None,None)
                     self.indexRow,self.indexCol = 1,0
                     self.dictAcademie = {}
@@ -261,15 +214,14 @@ class Window:
                         self.academieName = Text_Button_Entry("Check",academieList[i],self.chooseLocationFrame,self.indexRow,1,self.indexCol,1,0,10,12,None,self.academieValue,None,20,None,None)
                         self.dictAcademie[academieList[i]] = self.academieValue
                         self.indexCol += 1
-                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,4,0,10,15,self.verifyBar,None,None,None,None,None)
+                    self.validButtonLocation = Text_Button_Entry("Button","Valider",self.chooseLocationFrame,self.indexRow+1,1,0,4,0,10,15,lambda : self.verify(type),None,None,None,None,None)
 
                 self.chooseLocationFrame.pack()
             else:
-                self.barMenuFrame.destroy()
-                self.generateBarChart()
+                self.generateChart(type)
 
-
-    def verifyPie(self):
+    #If location not equal to entire France, verify region or academie choose
+    def verify(self,type):
         sum = 0
         if self.locationRegion.get() == 1:
             for values in self.dictRegion.values():
@@ -281,25 +233,10 @@ class Window:
             errorBox("Veuillez choisir un seul lieu.")
         else:
             self.chooseLocationFrame.destroy()
-            self.generatePieChart()
+            self.generateChart(type)
 
-
-    def verifyBar(self):
-        sum = 0
-        if self.locationRegion.get() == 1:
-            for values in self.dictRegion.values():
-                sum += values.get()
-        else:
-            for values in self.dictAcademie.values():
-                sum += values.get()
-        if sum != 1:
-            errorBox("Veuillez choisir un seul lieu.")
-        else:
-            self.chooseLocationFrame.destroy()
-            self.generateBarChart()
-
-
-    def generatePieChart(self):
+    #Create plot using visualisation.py 
+    def generateChart(self,type):
         #Year
         for keys,values in self.dictYear.items():
             if values.get() == 1:
@@ -309,11 +246,17 @@ class Window:
             if values.get() == 1:
                 classe = keys
         #Gender
-        gender="All"
+        if type == "pie":
+            gender="All"
+        elif type == "bar":
+            for keys,values in self.dictGender.items():
+                if values.get() == 1:
+                    gender = keys
         #Spe
-        for keys,values in self.dictSpe.items():
-            if values.get() == 1:
-                spe = keys
+        if type == "pie":
+            for keys,values in self.dictSpe.items():
+                if values.get() == 1:
+                    spe = keys
         #Location and LocationName
         locationName = ""
         if self.locationFR.get() == 1:
@@ -332,44 +275,14 @@ class Window:
         self.dataResult = data.speCount(classe+".csv",year,gender,location,locationName)
 
         self.showPlotFrame = tk.Frame(self.win,bg="#FFFFFF")
-        self.plot = viz.piePlot(self.dataResult,year,classe,location,locationName,spe)
+        if type == "pie":
+            self.plot = viz.piePlot(self.dataResult,year,classe,location,locationName,spe)
+        elif type == "bar":
+            self.plot = viz.barPlot(self.dataResult,year,classe,gender,location,locationName)
+        
         self.showPlot()
 
-
-    def generateBarChart(self):
-        #Year
-        for keys,values in self.dictYear.items():
-            if values.get() == 1:
-                year = keys
-        #Classe
-        for keys,values in self.dictClasse.items():
-            if values.get() == 1:
-                classe = keys
-        #Gender
-        for keys,values in self.dictGender.items():
-            if values.get() == 1:
-                gender = keys
-        #Location and LocationName
-        locationName = ""
-        if self.locationFR.get() == 1:
-            location = "fr"
-        elif self.locationRegion.get() == 1:
-            location = "region"
-            for keys,values in self.dictRegion.items():
-                if values.get() == 1:
-                    locationName = keys
-        else:
-            location = "academie"
-            for keys,values in self.dictAcademie.items():
-                if values.get() == 1:
-                    locationName = keys
-
-        self.dataResult = data.speCount(classe+".csv",year,gender,location,locationName)
-
-        self.showPlotFrame = tk.Frame(self.win,bg="#FFFFFF")
-        self.plot = viz.barPlot(self.dataResult,year,classe,gender,location,locationName)
-        self.showPlot()
-
+    #Show plot
     def showPlot(self):
         self.plot.savefig("tmp.png")
         self.plot.clf()
@@ -379,7 +292,7 @@ class Window:
         self.imagePlotTk = tk.Label(self.showPlotFrame,image=self.imagePlot)
 
         self.showPlotTitle = Text_Button_Entry("Label","Resultat du graphique",self.showPlotFrame,0,1,0,2,0,10,30,None,None,None,None,None,None)
-        self.imagePlotTk.grid(row = 1, rowspan = 3, column=0, columnspan=1)
+        self.imagePlotTk.grid(row = 1, rowspan = 3, column=0, columnspan=1,pady=15)
         self.newPlotButton = Text_Button_Entry("Button","Nouveau\ngraphique",self.showPlotFrame,1,1,1,1,25,15,25,self.restart,None,None,None,13,2)
         self.savePlotButton = Text_Button_Entry("Button","Sauvegarder",self.showPlotFrame,2,1,1,1,25,15,25,self.savePlot,None,None,None,13,2)
         self.quitButton = Text_Button_Entry("Button","Quitter",self.showPlotFrame,3,1,1,1,25,15,25,exit,None,None,None,13,2)
@@ -387,17 +300,17 @@ class Window:
         self.showPlotFrame.pack()
         os.remove("tmp.png")
 
-
+    #Restart the window
     def restart(self):
         self.showPlotFrame.destroy()
         self.winMainMenu()
 
-
+    #Saveplot
     def savePlot(self):
         self.file = asksaveasfile(initialfile = 'figure.png',defaultextension=".png")
         self.tmpImage.save(self.file.name)
 
-
+#Classe to display an errorBox with customized message
 class errorBox:
     def __init__(self,errorMessage):
         self.errorMessage = errorMessage
