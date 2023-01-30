@@ -62,3 +62,34 @@ def speCount(file,year,gender,location,locationName):
         return speGirls
     elif gender == "Boys":
         return speBoys
+
+
+def speCountRegion(file,year,speName):
+    gap = 0
+    if file == "terminale.csv":
+        gap = 2
+        
+    dicoIndex = {"HLP":[13,14],"LLCA":[15,16,17,18],"LLCER":[19,20],"HGGSP":[21,22],
+        "SES":[23,24],"MTH": [25,26],"PC":[27,28],"SVT":[29,30],"SI":[31,32],
+        "NSI":[33-gap,34-gap],"ART":[i-gap for i in range(35,49)]}
+
+    dicoRegion = {"AUVERGNE-RHONE-ALPES":84,"BOURGOGNE-FRANCHE-COMTE":27,"BRETAGNE":53,"CENTRE-VAL DE LOIRE":24,
+    "CORSE":94,"GRAND EST":44,"HAUTS-DE-FRANCE":32,"ILE-DE-FRANCE":11,"NORMANDIE":28,
+    "NOUVELLE-AQUITAINE":75,"OCCITANIE":76,"PAYS DE LA LOIRE":52,"PROVENCE-ALPES-COTE D'AZUR":93}
+    excludedRegion = ['GUADELOUPE',"MARTINIQUE","GUYANE","MAYOTTE","LA REUNION","OUTRE-MER HORS REGIONS ACADEMIQUES"]
+
+    df = pd.read_csv("data/"+file)
+    
+    tmpDict = {11:0,24:0,27:0,28:0,32:0,44:0,52:0,53:0,75:0,76:0,84:0,93:0,94:0}
+    
+    for row in df.itertuples():
+        if row[1] == year and row[2] not in excludedRegion:
+            for item in dicoIndex[speName]:
+                tmpDict[dicoRegion[row[2]]] += row[item]
+    
+    dicoRes = {"index":[],"value":[]}
+    for key,value in tmpDict.items():
+        dicoRes["index"].append(str(key))
+        dicoRes["value"].append(value)
+
+    return dicoRes

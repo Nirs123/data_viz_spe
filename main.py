@@ -320,4 +320,8 @@ class errorBox:
         self.errorText = Text_Button_Entry("Label",self.errorMessage,self.popUp,0,1,0,1,10,10,20,None,None,None,None,None,None)
         self.exitButton = Text_Button_Entry("Button","Ok",self.popUp,1,1,0,1,0,0,14,self.popUp.destroy,None,None,None,None,None)
 
-win = Window()
+if __name__ == "__main__":
+    win = Window()
+    #data = data.speCountRegion("premiere.csv")
+    #tmpData = data.speCountRegion("premiere.csv",2020,"NSI")
+    #viz.mapPlot(tmpData,"2020","premiere","region","NSI")

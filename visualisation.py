@@ -1,4 +1,6 @@
+import geopandas as gpd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 #Function for bar Plot
 def barPlot(data,year,classe,gender,location,locationName):
@@ -70,3 +72,21 @@ def piePlot(data,year,classe,location,locationName,speName):
     
     #Return plot
     return plt
+
+def mapPlot(data,year,classe,location,speName):
+    newDF = pd.DataFrame.from_dict(data)
+    mapShape = gpd.read_file("geo/"+location+".geojson")
+
+    mapShape = mapShape[~mapShape['nom'].isin(['Guadeloupe',"Martinique","Guyane","Mayotte","La Réunion"])]
+
+    mapShape = pd.merge(
+        left=mapShape,
+        right=newDF,
+        left_on="code",
+        right_on="index",
+        how="left"
+    )
+
+    ax = mapShape.boundary.plot()
+    mapShape.plot(ax=ax,column="value")
+    plt.show()
