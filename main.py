@@ -321,7 +321,8 @@ class errorBox:
         self.exitButton = Text_Button_Entry("Button","Ok",self.popUp,1,1,0,1,0,0,14,self.popUp.destroy,None,None,None,None,None)
 
 if __name__ == "__main__":
-    win = Window()
+    #win = Window()
     #data = data.speCountRegion("premiere.csv")
-    #tmpData = data.speCountRegion("premiere.csv",2020,"NSI")
-    #viz.mapPlot(tmpData,"2020","premiere","region","NSI")
+    tmpData = data.speCountRegion("premiere.csv",2020,"NSI")
+    #print(tmpData)
+    viz.mapPlot(tmpData,"2020","premiere","region","NSI")

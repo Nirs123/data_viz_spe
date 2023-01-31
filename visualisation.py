@@ -88,5 +88,5 @@ def mapPlot(data,year,classe,location,speName):
     )
 
     ax = mapShape.boundary.plot()
-    mapShape.plot(ax=ax,column="value")
+    mapShape.plot(ax=ax,column="value",cmap='RdBu_r',legend=True)
     plt.show()
