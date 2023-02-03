@@ -77,7 +77,8 @@ def mapPlot(data,year,classe,location,speName):
     newDF = pd.DataFrame.from_dict(data)
     mapShape = gpd.read_file("geo/"+location+".geojson")
 
-    mapShape = mapShape[~mapShape['nom'].isin(['Guadeloupe',"Martinique","Guyane","Mayotte","La Réunion"])]
+    if location == 'region':
+        mapShape = mapShape[~mapShape['nom'].isin(['Guadeloupe',"Martinique","Guyane","Mayotte","La Réunion"])]
 
     mapShape = pd.merge(
         left=mapShape,
@@ -87,6 +88,30 @@ def mapPlot(data,year,classe,location,speName):
         how="left"
     )
 
-    ax = mapShape.boundary.plot()
-    mapShape.plot(ax=ax,column="value",cmap='RdBu_r',legend=True)
+    ax = mapShape.boundary.plot(edgecolor='black',linewidth=0.2,figsize=(8,7))
+    mapShape.plot(ax=ax,column="value",cmap='Wistia',legend=True,legend_kwds={"shrink":0.7,
+    "orientation":"vertical","format":"%.1f%%"})
+
+    ax.get_yaxis().set_visible(False)
+    ax.get_xaxis().set_visible(False)
+
+    for edge in ['right','bottom','left','top']:
+        ax.spines[edge].set_visible(False)
+
+    if location == "dep":
+        ax.set_title(f"Pourcentage des étudiants par département ayant\nla spécialité {speName} en {classe} a la rentrée {year}",
+                    size=15,weight='bold',pad=15)
+    else:
+        ax.set_title(f"Pourcentage des étudiants par région ayant\nla spécialité {speName} en {classe} a la rentrée {year}",
+                    size=15,weight='bold',pad=15)
+
+    plt.subplots_adjust(
+        top=0.805,
+        bottom=0.12,
+        left=0.16,
+        right=0.93,
+        hspace=0.2,
+        wspace=0.2  
+    )
+
     plt.show()

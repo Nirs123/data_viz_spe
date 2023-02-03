@@ -6,6 +6,8 @@ from PIL import ImageTk
 import os
 from tkinter.filedialog import asksaveasfile
 
+import geopandas as gpd
+
 #Creating list of regions and academies
 regionList = ["AUVERGNE-RHONE-ALPES" , "BOURGOGNE-FRANCHE-COMTE" , "BRETAGNE" , "CENTRE-VAL DE LOIRE" , "CORSE" , "GRAND EST" , "GUADELOUPE" , "GUYANE",
 "HAUTS-DE-FRANCE" , "ILE-DE-FRANCE" , "LA REUNION" , "MARTINIQUE" , "MAYOTTE" , "NORMANDIE" , "NOUVELLE-AQUITAINE" , "OCCITANIE" , "PAYS DE LA LOIRE",
@@ -63,15 +65,19 @@ class Window:
         self.menuFrame = tk.Frame(self.win,bg="#FFFFFF")
 
         self.barImage = Image.open("img/bar.png")
-        self.barImage = self.barImage.resize((400,300), Image.ANTIALIAS)
+        self.barImage = self.barImage.resize((280,210), Image.ANTIALIAS)
         self.barImage = ImageTk.PhotoImage(self.barImage)
         self.pieImage = Image.open('img/pie.png')
-        self.pieImage = self.pieImage.resize((400,300), Image.ANTIALIAS)
+        self.pieImage = self.pieImage.resize((280,210), Image.ANTIALIAS)
         self.pieImage = ImageTk.PhotoImage(self.pieImage)
+        self.mapImage = Image.open("img/map.png")
+        self.mapImage = self.mapImage.resize((280,210), Image.ANTIALIAS)
+        self.mapImage = ImageTk.PhotoImage(self.mapImage)
 
         self.title = Text_Button_Entry("Label","Choisissez un graphique",self.menuFrame,0,1,0,2,0,20,35,None,None,None,None,None,None)
         self.barButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,0,1,10,15,0,self.winBarMenu,None,self.barImage,None,None,None)
         self.pieButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,1,1,10,15,0,self.winPieMenu,None,self.pieImage,None,None,None)
+        self.mapButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,2,1,10,15,0,None,None,self.mapImage,None,None,None)
         self.barSubtitle = Text_Button_Entry("Label","Graphique à barres avec \nle nombre d'étudiants par spécialité",self.menuFrame,3,1,0,1,0,10,15,None,None,None,None,None,None)
         self.pieSubtitle = Text_Button_Entry("Label","Graphique circulaire représentant\n la répartition du sexe dans une spécialité",self.menuFrame,3,1,1,1,0,0,15,None,None,None,None,None,None)
 
@@ -168,6 +174,14 @@ class Window:
         self.validButtonPie = Text_Button_Entry("Button","Valider",self.barMenuFrame,13,1,0,4,0,25,15,lambda : self.process("bar"),None,None,None,None,None)
 
         self.barMenuFrame.pack()
+
+    #Map menu
+    def winMapMenu(self):
+        pass
+
+    #Process information from map menu
+    def processMap(self):
+        pass
 
     #Process information from bar and pie chart menu
     def process(self,type):
@@ -321,8 +335,11 @@ class errorBox:
         self.exitButton = Text_Button_Entry("Button","Ok",self.popUp,1,1,0,1,0,0,14,self.popUp.destroy,None,None,None,None,None)
 
 if __name__ == "__main__":
-    #win = Window()
-    #data = data.speCountRegion("premiere.csv")
-    tmpData = data.speCountRegion("premiere.csv",2020,"NSI")
-    #print(tmpData)
-    viz.mapPlot(tmpData,"2020","premiere","region","NSI")
+    win = Window()
+    # data = data.speCountRegion("premiere.csv")
+    # classe = "premiere"
+    # location = "dep"
+    # speName = "SES"
+    # year = "2020"
+    # tmpData = data.speCountDep(classe+".csv",2020,speName)
+    # viz.mapPlot(tmpData,year,classe,location,speName)
