@@ -114,4 +114,4 @@ def mapPlot(data,year,classe,location,speName):
         wspace=0.2  
     )
 
-    plt.show()
+    return plt

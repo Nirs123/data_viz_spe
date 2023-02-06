@@ -68,7 +68,8 @@ def speCountRegion(file,year,speName):
     gap = 0
     if file == "terminale.csv":
         gap = 2
-        
+    year = int(year)
+
     dicoIndex = {"HLP":[13,14],"LLCA":[15,16,17,18],"LLCER":[19,20],"HGGSP":[21,22],
         "SES":[23,24],"MTH": [25,26],"PC":[27,28],"SVT":[29,30],"SI":[31,32],
         "NSI":[33-gap,34-gap],"ART":[i-gap for i in range(35,49)]}
@@ -101,6 +102,7 @@ def speCountDep(file,year,speName):
     gap = 0
     if file == "terminale.csv":
         gap = 2
+    year = int(year)
         
     dicoIndex = {"HLP":[13,14],"LLCA":[15,16,17,18],"LLCER":[19,20],"HGGSP":[21,22],
         "SES":[23,24],"MTH": [25,26],"PC":[27,28],"SVT":[29,30],"SI":[31,32],

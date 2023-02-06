@@ -74,12 +74,13 @@ class Window:
         self.mapImage = self.mapImage.resize((280,210), Image.ANTIALIAS)
         self.mapImage = ImageTk.PhotoImage(self.mapImage)
 
-        self.title = Text_Button_Entry("Label","Choisissez un graphique",self.menuFrame,0,1,0,2,0,20,35,None,None,None,None,None,None)
-        self.barButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,0,1,10,15,0,self.winBarMenu,None,self.barImage,None,None,None)
-        self.pieButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,1,1,10,15,0,self.winPieMenu,None,self.pieImage,None,None,None)
-        self.mapButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,2,1,10,15,0,None,None,self.mapImage,None,None,None)
-        self.barSubtitle = Text_Button_Entry("Label","Graphique à barres avec \nle nombre d'étudiants par spécialité",self.menuFrame,3,1,0,1,0,10,15,None,None,None,None,None,None)
-        self.pieSubtitle = Text_Button_Entry("Label","Graphique circulaire représentant\n la répartition du sexe dans une spécialité",self.menuFrame,3,1,1,1,0,0,15,None,None,None,None,None,None)
+        self.title = Text_Button_Entry("Label","Choisissez un graphique",self.menuFrame,0,1,0,3,0,20,35,None,None,None,None,None,None)
+        self.barButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,0,1,10,15,50,self.winBarMenu,None,self.barImage,None,None,None)
+        self.pieButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,1,1,10,15,50,self.winPieMenu,None,self.pieImage,None,None,None)
+        self.mapButton = Text_Button_Entry("Button",None,self.menuFrame,1,1,2,1,10,15,50,self.winMapMenu,None,self.mapImage,None,None,None)
+        self.barSubtitle = Text_Button_Entry("Label","Graphique à barres avec \nle nombre d'étudiants\npar spécialité",self.menuFrame,3,1,0,1,0,10,15,None,None,None,None,None,None)
+        self.pieSubtitle = Text_Button_Entry("Label","Graphique circulaire de\n la répartition du sexe\ndans une spécialité",self.menuFrame,3,1,1,1,0,0,15,None,None,None,None,None,None)
+        self.pieSubtitle = Text_Button_Entry("Label","Carte repésentant\nla proportion des étudiantss\ndans une spécialité",self.menuFrame,3,1,2,1,0,0,15,None,None,None,None,None,None)
 
         self.menuFrame.pack()
 
@@ -177,11 +178,89 @@ class Window:
 
     #Map menu
     def winMapMenu(self):
-        pass
+        self.menuFrame.destroy()
+        self.mapMenuFrame = tk.Frame(self.win,bg="#FFFFFF")
+
+        self.year2020, self.year2021 = tk.IntVar(),tk.IntVar()
+        self.dictYear = {"2020":self.year2020,"2021":self.year2021}
+
+        self.classeP, self.classeT = tk.IntVar(),tk.IntVar()
+        self.dictClasse = {"premiere":self.classeP,"terminale":self.classeT}
+
+        self.genderA, self.genderG, self.genderB = tk.IntVar(),tk.IntVar(),tk.IntVar()
+        self.dictGender = {"All":self.genderA,"Girls":self.genderG,"Boys":self.genderB}
+
+        self.speHLP,self.speLLCA,self.speLLCER,self.speHGGSP,self.speSES,self.speMTH,self.spePC,self.speSVT,self.speSI,self.speNSI,self.speART = tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()
+        self.dictSpe = {"HLP":self.speHLP,"LLCA":self.speLLCA,"LLCER":self.speLLCER,"HGGSP":self.speHGGSP,"SES":self.speSES,"MTH":self.speMTH,
+                        "PC":self.spePC,"SVT":self.speSVT,"SI":self.speSI,"NSI":self.speNSI,"ART":self.speART}
+
+        self.locationRegion,self.locationDep = tk.IntVar(),tk.IntVar()
+
+        self.title = Text_Button_Entry("Label","Choisissez les options du graphique",self.mapMenuFrame,0,1,0,4,0,10,20,None,None,None,None,None,None)
+
+        self.yearTitle = Text_Button_Entry("Label","Année:",self.mapMenuFrame,1,1,0,1,0,10,20,None,None,None,None,None,None)
+        self.year2020Check = Text_Button_Entry("Check","2020",self.mapMenuFrame,2,1,0,1,0,3,12,None,self.year2020,None,20,None,None)
+        self.year2021Check = Text_Button_Entry("Check","2021",self.mapMenuFrame,2,1,1,2,0,3,12,None,self.year2021,None,20,None,None)
+
+        self.classeTitle = Text_Button_Entry("Label","Classe:",self.mapMenuFrame,3,1,0,1,0,10,20,None,None,None,None,None,None)
+        self.classePTitle = Text_Button_Entry("Check","Première",self.mapMenuFrame,4,1,0,1,0,3,12,None,self.classeP,None,20,None,None)
+        self.classeTTitle = Text_Button_Entry("Check","Terminale",self.mapMenuFrame,4,1,1,2,0,3,12,None,self.classeT,None,20,None,None)
+
+        self.speTitle = Text_Button_Entry("Label","Spécialité:",self.mapMenuFrame,5,1,0,1,0,10,20,None,None,None,None,None,None)
+        self.speHLPTitle = Text_Button_Entry("Check","HLP",self.mapMenuFrame,6,1,0,1,0,3,12,None,self.speHLP,None,20,None,None)
+        self.speLLCATitle = Text_Button_Entry("Check","LLCA",self.mapMenuFrame,6,1,1,1,0,3,12,None,self.speLLCA,None,20,None,None)
+        self.speLLCERTitle = Text_Button_Entry("Check","LLCER",self.mapMenuFrame,6,1,2,1,0,3,12,None,self.speLLCER,None,20,None,None)
+        self.speHGGSPTitle = Text_Button_Entry("Check","HGGSP",self.mapMenuFrame,6,1,3,1,0,3,12,None,self.speHGGSP,None,20,None,None)
+        self.speSESTitle = Text_Button_Entry("Check","SES",self.mapMenuFrame,7,1,0,1,0,3,12,None,self.speSES,None,20,None,None)
+        self.speMTHTitle = Text_Button_Entry("Check","MTH",self.mapMenuFrame,7,1,1,1,0,3,12,None,self.speMTH,None,20,None,None)
+        self.spePCTitle = Text_Button_Entry("Check","PC",self.mapMenuFrame,7,1,2,1,0,3,12,None,self.spePC,None,20,None,None)
+        self.speSVTTitle = Text_Button_Entry("Check","SVT",self.mapMenuFrame,7,1,3,1,0,3,12,None,self.speSVT,None,20,None,None)
+        self.speSITitle = Text_Button_Entry("Check","SI",self.mapMenuFrame,8,1,0,1,0,3,12,None,self.speSI,None,20,None,None)
+        self.speNSITitle = Text_Button_Entry("Check","NSI",self.mapMenuFrame,8,1,1,1,0,3,12,None,self.speNSI,None,20,None,None)
+        self.speARTTitle = Text_Button_Entry("Check","ART",self.mapMenuFrame,8,1,2,1,0,3,12,None,self.speART,None,20,None,None)
+
+        self.locationTitle = Text_Button_Entry("Label","Affichage:",self.mapMenuFrame,9,1,0,1,0,10,20,None,None,None,None,None,None)
+        self.locationRegionTitle = Text_Button_Entry("Check","Régions",self.mapMenuFrame,10,1,0,1,0,3,12,None,self.locationRegion,None,20,None,None)
+        self.locationDepTitle = Text_Button_Entry("Check","Départements",self.mapMenuFrame,10,1,1,1,0,3,12,None,self.locationDep,None,20,None,None)
+
+        self.validButtonPie = Text_Button_Entry("Button","Valider",self.mapMenuFrame,11,1,0,4,0,15,15,self.processMap,None,None,None,None,None)
+
+        self.mapMenuFrame.pack()
 
     #Process information from map menu
     def processMap(self):
-        pass
+        if (self.year2020.get() + self.year2021.get()) != 1:
+            errorBox("Veuillez choisir une seule année.")
+        elif (self.classeP.get() + self.classeT.get()) != 1:
+            errorBox("Veuillez choisir une seule classe.")
+        elif (self.speHLP.get() + self.speLLCA.get() + self.speLLCER.get() + self.speHGGSP.get() + self.speSES.get() + self.speMTH.get()
+            + self.spePC.get() + self.speSVT.get() + self.speSI.get() + self.speNSI.get() + self.speART.get()) != 1:
+            errorBox("Veuillez choisir un seul enseignement de spécialité")
+        elif (self.locationDep.get() + self.locationRegion.get()) != 1:
+            errorBox("Veuillez choisir un seul type d'affichage")
+        else:
+            self.mapMenuFrame.destroy()
+            #Year
+            for keys,values in self.dictYear.items():
+                if values.get() == 1:
+                    year = keys
+            #Classe
+            for keys,values in self.dictClasse.items():
+                if values.get() == 1:
+                    classe = keys
+            #Spe
+            for keys,values in self.dictSpe.items():
+                if values.get() == 1:
+                    spe = keys
+
+            if self.locationDep.get() == 1:
+                self.dataResult = data.speCountDep(classe+".csv",year,spe)
+                self.plot = viz.mapPlot(self.dataResult,year,classe,"dep",spe)
+            elif self.locationRegion.get() == 1:
+                self.dataResult = data.speCountRegion(classe+".csv",year,spe)
+                self.plot = viz.mapPlot(self.dataResult,year,classe,"region",spe)
+
+            self.showPlot()
 
     #Process information from bar and pie chart menu
     def process(self,type):
@@ -288,7 +367,6 @@ class Window:
 
         self.dataResult = data.speCount(classe+".csv",year,gender,location,locationName)
 
-        self.showPlotFrame = tk.Frame(self.win,bg="#FFFFFF")
         if type == "pie":
             self.plot = viz.piePlot(self.dataResult,year,classe,location,locationName,spe)
         elif type == "bar":
@@ -298,6 +376,7 @@ class Window:
 
     #Show plot
     def showPlot(self):
+        self.showPlotFrame = tk.Frame(self.win,bg="#FFFFFF")
         self.plot.savefig("tmp.png")
         self.plot.clf()
         self.tmpImage = (Image.open("tmp.png"))
@@ -336,10 +415,3 @@ class errorBox:
 
 if __name__ == "__main__":
     win = Window()
-    # data = data.speCountRegion("premiere.csv")
-    # classe = "premiere"
-    # location = "dep"
-    # speName = "SES"
-    # year = "2020"
-    # tmpData = data.speCountDep(classe+".csv",2020,speName)
-    # viz.mapPlot(tmpData,year,classe,location,speName)
