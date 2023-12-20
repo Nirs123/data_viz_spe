@@ -58,13 +58,13 @@ def main():
     # Sidebar social media links
     col1, col2, col3, col4 = st.sidebar.columns(4)
     with col1:
-        st.markdown(f"[![YouTube](https://img.icons8.com/color/65/000000/youtube-play.png)](https://google.com)")
+        st.markdown(f"[![YouTube](https://img.icons8.com/color/65/000000/youtube-play.png)](https://www.youtube.com/@TechWithNirs)")
     with col2:
-        st.markdown(f"[![Twitter](https://img.icons8.com/color/65/000000/twitter--v1.png)](https://google.com)")
+        st.markdown(f"[![Twitter](https://img.icons8.com/color/65/000000/twitter--v1.png)](https://twitter.com/Nirs_F)")
     with col3:
-        st.markdown(f"[![GitHub](https://img.icons8.com/ios/65/github--v1.png)](https://google.com)")
+        st.markdown(f"[![GitHub](https://img.icons8.com/ios/65/github--v1.png)](https://github.com/Nirs123)")
     with col4:
-        st.markdown(f"[![LinkedIn](https://img.icons8.com/color/65/linkedin.png)](https://google.com)")
+        st.markdown(f"[![LinkedIn](https://img.icons8.com/color/65/linkedin.png)](https://www.linkedin.com/in/nicolas-foussard-b60613229)")
 
     # Two columns for the configuration and the result
     CONFIG_COL, RESULT_COL = st.columns([1.5,1], gap='large')
