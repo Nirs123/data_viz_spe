@@ -1,5 +1,5 @@
 # data_viz_spe
-Data Viz Spe is a Data Visualization projet on French High School's specialties. French High School's specialities are disciplines like Mathematics, Science, History and Geography...
+Data Viz Spe is a Data Visualization projet on French High School's specialities. French High School's specialities are disciplines like Mathematics, Science, History and Geography...
 
 **Here is the link to the application:** https://data-viz-spe.streamlit.app/
 
