@@ -1,2 +1,3 @@
 geopandas
 matplotlib
+st_social_media_links

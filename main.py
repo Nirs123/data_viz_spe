@@ -1,14 +1,15 @@
 import data as data_process
 import visualisation as viz
 import streamlit as st
+from st_social_media_links import SocialMediaIcons
 
 
 # Declaring constants
 REGIONS = ["AUVERGNE-RHONE-ALPES", "BOURGOGNE-FRANCHE-COMTE", "BRETAGNE", "CENTRE-VAL DE LOIRE", "CORSE", "GRAND EST", "GUADELOUPE", "GUYANE", "HAUTS-DE-FRANCE",
             "ILE-DE-FRANCE", "LA REUNION", "MARTINIQUE", "MAYOTTE", "NORMANDIE", "NOUVELLE-AQUITAINE", "OCCITANIE", "PAYS DE LA LOIRE", "PROVENCE-ALPES-COTE D'AZUR"]
 ACADEMIES = ["CLERMONT-FERRAND", "GRENOBLE", "LYON", "BESANCON", "DIJON", "RENNES", "ORLEANS-TOURS", "CORSE", "NANCY-METZ", "REIMS", "STRASBOURG", "GUADELOUPE",
-             "GUYANE", "AMIENS", "LILLE", "CRETEIL", "PARIS", "VERSAILLES", "LA REUNION", "MARTINIQUE", "MAYOTTE", "NORMANDIE", "BORDEAUX", "LIMOGES",
-             "POITIERS", "MONTPELLIER", "TOULOUSE", "NANTES", "AIX-MARSEILLE", "NICE", "NOUVELLE CALEDONIE", "POLYNESIE FRANCAISE", "ST PIERRE ET MIQUELON"]
+            "GUYANE", "AMIENS", "LILLE", "CRETEIL", "PARIS", "VERSAILLES", "LA REUNION", "MARTINIQUE", "MAYOTTE", "NORMANDIE", "BORDEAUX", "LIMOGES",
+            "POITIERS", "MONTPELLIER", "TOULOUSE", "NANTES", "AIX-MARSEILLE", "NICE", "NOUVELLE CALEDONIE", "POLYNESIE FRANCAISE", "ST PIERRE ET MIQUELON"]
 GENRES = {
     "Filles et Garçons" : "All",
     "Filles" : "Girls",
@@ -54,17 +55,15 @@ def main():
     
     # Sidebar configuration
     st.sidebar.header('Développé par Nicolas Foussard')
-    st.sidebar.divider()
     # Sidebar social media links
-    col1, col2, col3, col4 = st.sidebar.columns(4)
-    with col1:
-        st.markdown(f"[![YouTube](https://img.icons8.com/color/65/000000/youtube-play.png)](https://www.youtube.com/@TechWithNirs)")
-    with col2:
-        st.markdown(f"[![Twitter](https://img.icons8.com/color/65/000000/twitter--v1.png)](https://twitter.com/Nirs_F)")
-    with col3:
-        st.markdown(f"[![GitHub](https://img.icons8.com/ios/65/github--v1.png)](https://github.com/Nirs123)")
-    with col4:
-        st.markdown(f"[![LinkedIn](https://img.icons8.com/color/65/linkedin.png)](https://www.linkedin.com/in/nicolas-foussard-b60613229)")
+    social_media_links = [
+        "https://www.youtube.com/@TechWithNirs",
+        "https://twitter.com/Nirs_F",
+        "https://github.com/Nirs123",
+        "https://www.linkedin.com/in/nicolas-foussard-b60613229"
+    ]
+    social_media_icons = SocialMediaIcons(social_media_links)
+    social_media_icons.render(sidebar=True)
 
     # Two columns for the configuration and the result
     CONFIG_COL, RESULT_COL = st.columns([1.5,1], gap='large')
@@ -75,8 +74,8 @@ def main():
         st.subheader('Configurez votre Visualisation:')
 
         graphicType = st.selectbox('**Type de graphique**', ["Répartition garçon/fille d'une spécialité",
-                                                             "Nombre d'élèves par spécialité",
-                                                             "Répartition géographique des élèves"])
+                                                            "Nombre d'élèves par spécialité",
+                                                            "Répartition géographique des élèves"])
 
         if graphicType == "Répartition garçon/fille d'une spécialité" or graphicType == "Nombre d'élèves par spécialité":
             year = st.radio("**Année**", ["2020","2021"], horizontal=True)
@@ -135,7 +134,7 @@ def main():
             elif graphicType == "Nombre d'élèves par spécialité":
                 plot = viz.barPlot(data,GENRES[genre])
             plot.title(title)
-            
+
 
         elif graphicType == "Répartition géographique des élèves":
             if location_scale == "Régions":
